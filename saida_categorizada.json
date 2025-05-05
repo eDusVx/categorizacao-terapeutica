@@ -1,0 +1,197 @@
+[
+  {
+    "falante": "Terapeuta",
+    "texto": "Bom dia, como você está se sentindo hoje?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Tenho me sentido bastante ansioso ultimamente, especialmente no trabalho.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Isso parece difícil.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Pode me contar um pouco mais sobre o que está causando essa ansiedade no trabalho?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Acho que é a quantidade de responsabilidade que estou assumindo. Parece que estou sempre correndo atrás de prazos e não consigo relaxar.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Entendo.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Quando você percebe que está se sentindo assim, o que você faz normalmente?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Tento me concentrar no que preciso fazer, mas acaba me sobrecarregando ainda mais.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "E como você se sente fisicamente quando está sobrecarregado?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Meu coração acelera, começo a suar e minha mente fica muito agitada.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Parece que seu corpo está reagindo fortemente ao estresse.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Já pensou em alguma estratégia para lidar com esses momentos de sobrecarga?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Sim, tentei meditação algumas vezes, mas é difícil manter a prática.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "A meditação pode ser útil, mas talvez precisemos encontrar outras formas que funcionem melhor para você.",
+    "categoria": "INF"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Vamos explorar algumas opções juntas.",
+    "categoria": "INF"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Você mencionou antes que se sentiu frustrado com a situação.",
+    "categoria": "INF"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Pode falar mais sobre isso?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Sim, é como se, não importa o que eu faça, nunca é suficiente.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Entendo. Essa sensação de não ser suficiente, você sente isso em outras áreas da sua vida também?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Sim, especialmente no trabalho. Parece que eu sempre estou correndo atrás, mas nunca alcanço.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Essa sensação no trabalho é algo que você sente há muito tempo ou é mais recente?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Acho que começou nos últimos dois anos, quando eu comecei a assumir mais responsabilidades.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Como você tem lidado com essas novas responsabilidades?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "No começo, eu estava animado, mas agora parece que está me sobrecarregando.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "O que te dá essa sensação de sobrecarga? É o volume de trabalho, as expectativas, ou outra coisa?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Acho que é um pouco de tudo, mas principalmente as expectativas. Sinto que preciso estar sempre perfeito.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Essa necessidade de perfeição, você consegue identificar de onde ela vem?",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Acho que sempre tive essa pressão sobre mim, desde a infância, meus pais sempre esperavam muito de mim.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Parece que a pressão começou cedo, e você carrega isso até hoje, certo.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Sim, e mesmo que eles não falem nada agora, eu ainda sinto que tenho que ser perfeito.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "E como isso afeta a forma como você se sente em relação a si mesmo agora.",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Eu sinto que nunca estou à altura, que sempre poderia fazer mais, ser melhor.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "É difícil viver com essa sensação de que nunca é o suficiente, imagino que isso possa ser bem desgastante.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Sim, é como se eu nunca pudesse relaxar ou me sentir bem com o que faço.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Quando você se sente assim, o que você faz para lidar com essa pressão interna.",
+    "categoria": "SRE"
+  },
+  {
+    "falante": "Cliente",
+    "texto": "Eu tento trabalhar mais, ser mais produtivo, mas isso só piora a sensação de exaustão.",
+    "categoria": "REL"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Então, quanto mais você tenta melhorar, mais exausto e insatisfeito você se sente.",
+    "categoria": "EMP"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Você tomou a decisão certa. Está lidando com isso muito bem!",
+    "categoria": "APR"
+  },
+  {
+    "falante": "Terapeuta",
+    "texto": "Você perdeu seu emprego e está muito díficil encontrar um outro.",
+    "categoria": "INF"
+  }
+]
