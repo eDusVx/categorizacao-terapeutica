@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { HttpService } from '@nestjs/axios'
+import { Injectable, Logger } from '@nestjs/common'
 import { lastValueFrom } from 'rxjs'
-import { readFileSync, existsSync, writeFileSync } from 'fs'
 import { CsvService } from './csv.service'
 import { FalaCategorizada } from './interfaces/FalaCategorizada.interface'
+import * as pdfParse from 'pdf-parse'
 
 @Injectable()
 export class SimccitService {
@@ -14,11 +15,14 @@ export class SimccitService {
         private readonly csvService: CsvService,
     ) {}
 
-    private buildPrompt(transcricao: string): string {
+    private buildPrompt(transcricao: string, pdfText: string): string {
         return `
 Você é um especialista em categorização de interações terapêuticas, utilizando o Sistema Multidimensional de Categorização de Comportamentos da Interação Terapêutica (SiMCCIT).
 
 Utilize o manual detalhado do SiMCCIT (enviado como PDF) para consultar as definições e critérios de inclusão/exclusão.
+
+Manual detalhado do SiMCCIT:
+${pdfText}
 
 Sua tarefa é analisar a transcrição da sessão terapêutica fornecida abaixo e categorizar cada verbalização individual (turno de fala de um falante) ou segmentos dentro de uma verbalização.
 
@@ -68,13 +72,9 @@ ${transcricao}
 
     async categorizeTranscript(transcricao: string): Promise<FalaCategorizada[]> {
         try {
-            const pdfPath = process.env.PDF_PATH
-            if (!pdfPath || !existsSync(pdfPath)) throw new Error('Arquivo PDF não encontrado')
-            const pdfBuffer = readFileSync(pdfPath)
-            const pdfBase64 = pdfBuffer.toString('base64')
-            const pdfDataUrl = `data:application/pdf;base64,${pdfBase64}`
+            this.logger.debug('Iniciando a categorização dos dados')
 
-            const apiResponse = await this.callCategorizationApi(transcricao, pdfDataUrl)
+            const apiResponse = await this.callCategorizationApi(transcricao)
 
             return this.processApiResponse(apiResponse)
         } catch (error) {
@@ -83,29 +83,22 @@ ${transcricao}
         }
     }
 
-    private async callCategorizationApi(transcricao: string, pdfDataUrl: string) {
+    private async callCategorizationApi(transcricao: string) {
         const apiUrl = process.env.API_URL
         const apiKey = process.env.API_KEY
         const model = process.env.MODEL
+        const pdfPath = process.env.PDF_PATH
 
-        if (!apiUrl || !apiKey || !model) throw new Error('Configuração da API incompleta')
+        if (!apiUrl) throw new Error('Configuração da API incompleta')
+
+        if (!pdfPath || !existsSync(pdfPath)) throw new Error('Arquivo PDF não encontrado')
+
+        const pdfText = await this.extractPdfText(pdfPath)
 
         const messages = [
             {
                 role: 'user',
-                content: [
-                    {
-                        type: 'text',
-                        text: this.buildPrompt(transcricao),
-                    },
-                    {
-                        type: 'file_url',
-                        file_url: {
-                            url: pdfDataUrl,
-                            engine: 'pdf-text',
-                        },
-                    },
-                ],
+                content: this.buildPrompt(transcricao, pdfText),
             },
         ]
 
@@ -136,7 +129,7 @@ ${transcricao}
             if (!categorizedData?.length) {
                 throw new Error('Falha ao categorizar os dados')
             }
-
+            this.logger.debug('Montando arquivo csv de retorno')
             return this.csvService.reconstructCsvWithCategorization(parseResult, categorizedData)
         } catch (error) {
             this.logger.error(`Erro ao categorizar CSV: ${error.message}`)
@@ -149,6 +142,7 @@ ${transcricao}
             this.logger.error('Resposta da API inválida:', response.data)
             throw new Error('Erro na resposta da API')
         }
+        this.logger.debug('Resposta recebida e sendo tratada')
 
         const output = response.data.choices[0].message.content
 
@@ -218,5 +212,11 @@ ${transcricao}
         } catch (error) {
             this.logger.error('Erro ao salvar output:', error)
         }
+    }
+
+    private async extractPdfText(pdfPath: string): Promise<string> {
+        const dataBuffer = readFileSync(pdfPath)
+        const data = await pdfParse(dataBuffer)
+        return data.text
     }
 }

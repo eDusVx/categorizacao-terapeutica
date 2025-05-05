@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Get, UseInterceptors, Res, HttpStatus, UploadedFile } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Response } from 'express'
-import { SimccitService } from './simccit.service'
 import { TranscricaoDto } from './dto/Transficao.dto'
 import { FalaCategorizada } from './interfaces/FalaCategorizada.interface'
 import { IUploadedFile } from './interfaces/UploadedFile.interface'
+import { SimccitService } from './simccit.service'
 
 @Controller('categorizacao')
 export class SimccitController {

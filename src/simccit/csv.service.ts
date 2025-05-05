@@ -9,6 +9,8 @@ export class CsvService {
 
     parseCsvToTranscription(csvContent: string) {
         try {
+            this.logger.debug(`Iniciando o parse do arquivo csv`)
+
             const cleanedCsv = this.cleanCsvContent(csvContent)
             const records = this.parseRecords(cleanedCsv)
             this.validateCsvStructure(records)
