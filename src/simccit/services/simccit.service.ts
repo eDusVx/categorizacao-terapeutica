@@ -230,13 +230,22 @@ export class SimccitService {
             'Content-Type': 'application/json',
         }
 
+        const options = {
+            temperature: 0,
+            top_p: 0.1,
+            top_k: 10,
+            repeat_penalty: 1.2,
+            repeat_last_n: 128,
+            min_p: 0.05
+        }
+
         return lastValueFrom(
             this.httpService.post(
                 apiUrl,
                 {
                     model: model,
                     messages: messages,
-                    temperature: 0,
+                    options: options,
                 },
                 {
                     headers: headers,
