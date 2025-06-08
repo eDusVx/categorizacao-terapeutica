@@ -285,7 +285,7 @@
             <button type="submit" id="btnCsv" aria-busy="false">Categorizar
               CSV</button>
             <a
-              href="http://localhost:3000/simccit/categorizacao/example-csv-format"
+              href="http://localhost:3000/simccit/example-csv-format"
               class="small" download>Baixar exemplo de CSV</a>
           </form>
           <div id="csvResult" class="result" role="status"
@@ -346,7 +346,7 @@
           btn.textContent = 'Categorizar Frases';
           return;
         }
-        const res = await fetch('http://localhost:3000/simccit/categorizacao/categorizar-texto', {
+        const res = await fetch('http://localhost:3000/simccit/categorizar-texto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ transcricao })
@@ -414,7 +414,7 @@
       formData.append('file', fileInput.files[0]);
 
       try {
-        const res = await fetch('http://localhost:3000/simccit/categorizacao/categorizar-csv', {
+        const res = await fetch('http://localhost:3000/simccit/categorizar-csv', {
           method: 'POST',
           body: formData
         });

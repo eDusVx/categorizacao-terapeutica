@@ -14,7 +14,7 @@ import { FalaCategorizada } from './interfaces/FalaCategorizada.interface'
 import { IUploadedFile } from './interfaces/UploadedFile.interface'
 import { SimccitService } from './services/simccit.service'
 
-@Controller('categorizacao')
+@Controller('simccit')
 export class SimccitController {
     constructor(private readonly simccitService: SimccitService) {}
 

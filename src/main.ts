@@ -9,8 +9,6 @@ async function bootstrap() {
 
     app.useStaticAssets(join(__dirname, '..', 'public'))
 
-    app.setGlobalPrefix('simccit')
-
     app.enableCors({
         origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
