@@ -45,7 +45,7 @@ export class SimccitController {
 
     @Get('example-csv-format')
     getExampleCsvFormat() {
-        const exampleCsv = `falante,texto,categorizacao
+        const exampleCsv = `falante,texto,categoria
             Terapeuta,"Bom dia, como você está se sentindo hoje?",
             Cliente,"Tenho me sentido bastante ansioso ultimamente, especialmente no trabalho."`
 

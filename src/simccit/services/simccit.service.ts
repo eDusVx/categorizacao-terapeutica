@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios'
 import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
 import { lastValueFrom } from 'rxjs'
-import { CsvService } from './csv.service'
 import { FalaCategorizada } from '../interfaces/FalaCategorizada.interface'
+import { CsvService } from './csv.service'
 
 @Injectable()
 export class SimccitService {
@@ -254,7 +254,7 @@ export class SimccitService {
                 throw new InternalServerErrorException('Falha ao categorizar os dados')
             }
             this.logger.debug('Montando arquivo csv de retorno')
-            return this.csvService.reconstructCsvWithCategorization(parseResult, categorizedData)
+            return this.csvService.reconstructCsvWithCategorization(categorizedData)
         } catch (error) {
             this.logger.error(`Erro ao categorizar CSV: ${error.message}`)
             if (error instanceof BadRequestException || error instanceof InternalServerErrorException) {
@@ -272,7 +272,7 @@ export class SimccitService {
         this.logger.debug('Resposta recebida e sendo tratada')
 
         const output = response.data.choices[0].message.content
-
+        console.log(output)
         try {
             return this.parseApiOutput(output)
         } catch (error) {

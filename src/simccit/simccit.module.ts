@@ -2,8 +2,8 @@ import { HttpModule } from '@nestjs/axios'
 import { Module } from '@nestjs/common'
 import { MulterModule } from '@nestjs/platform-express'
 import { CsvService } from './services/csv.service'
-import { SimccitController } from './simccit.controller'
 import { SimccitService } from './services/simccit.service'
+import { SimccitController } from './simccit.controller'
 
 @Module({
     imports: [

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { SimccitModule } from './simccit/simccit.module'
 import { AppController } from './app.controller'
+import { SimccitModule } from './simccit/simccit.module'
 
 @Module({
     imports: [SimccitModule],

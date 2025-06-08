@@ -7,7 +7,7 @@ import { FalaCategorizada } from '../interfaces/FalaCategorizada.interface'
 export class CsvService {
     private readonly logger = new Logger(CsvService.name)
 
-    parseCsvToTranscription(csvContent: string) {
+    public parseCsvToTranscription(csvContent: string) {
         try {
             this.logger.debug(`Iniciando o parse do arquivo csv`)
 
@@ -61,7 +61,7 @@ export class CsvService {
         return {
             falanteIndex: headers.indexOf('falante'),
             textoIndex: headers.indexOf('texto'),
-            categorizacaoIndex: headers.indexOf('categorizacao'),
+            categorizacaoIndex: headers.indexOf('categoria'),
         }
     }
 
@@ -77,35 +77,17 @@ export class CsvService {
         return transcricao
     }
 
-    reconstructCsvWithCategorization(parseResult: any, categorizedData: FalaCategorizada[]): string {
+    public reconstructCsvWithCategorization(categorizedData: FalaCategorizada[]): string {
         try {
-            const updatedRecords = this.updateRecordsWithCategorization(parseResult.records, categorizedData)
-            return this.convertToCsv(updatedRecords)
+            const csv = csvStringify(categorizedData, {
+                header: true,
+                quoted: true,
+                quoted_empty: true,
+            })
+            return csv
         } catch (error) {
             this.logger.error(`Erro ao reconstruir CSV: ${error.message}`)
             throw error
         }
-    }
-
-    private updateRecordsWithCategorization(records: any[], categorizedData: FalaCategorizada[]) {
-        return records.map((record) => ({
-            ...record,
-            categorizacao: this.findCategorization(record, categorizedData),
-        }))
-    }
-
-    private findCategorization(record: any, categorizedData: FalaCategorizada[]): string {
-        const categorization = categorizedData.find(
-            (item) => item.falante.trim() === record.falante.trim() && item.texto.trim() === record.texto.trim(),
-        )
-        return categorization ? categorization.categoria : ''
-    }
-
-    private convertToCsv(records: any[]): string {
-        return csvStringify(records, {
-            header: true,
-            quoted: true,
-            quoted_empty: true,
-        })
     }
 }

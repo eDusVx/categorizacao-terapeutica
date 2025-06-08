@@ -4,7 +4,6 @@ import { Response } from 'express'
 
 @Controller()
 export class AppController {
-
     @Get('hello')
     getHello(): string {
         return 'Hello World!'
