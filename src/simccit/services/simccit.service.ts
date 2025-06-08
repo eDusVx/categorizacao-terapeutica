@@ -272,7 +272,7 @@ export class SimccitService {
         this.logger.debug('Resposta recebida e sendo tratada')
 
         const output = response.data.choices[0].message.content
-        console.log(output)
+
         try {
             return this.parseApiOutput(output)
         } catch (error) {
