@@ -1,6 +1,14 @@
-import { Body, Controller, Get, HttpStatus, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common'
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Post,
+    StreamableFile,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { Response } from 'express'
 import { TranscricaoDto } from './dto/Transficao.dto'
 import { FalaCategorizada } from './interfaces/FalaCategorizada.interface'
 import { IUploadedFile } from './interfaces/UploadedFile.interface'
@@ -12,47 +20,48 @@ export class SimccitController {
 
     @Post('categorizar-texto')
     async categorizeTranscript(@Body() categorizeTranscriptDto: TranscricaoDto): Promise<FalaCategorizada[]> {
-        return this.simccitService.categorizeTranscript(categorizeTranscriptDto.transcricao)
+        try {
+            if (!categorizeTranscriptDto.transcricao || categorizeTranscriptDto.transcricao.trim() === '') {
+                throw new BadRequestException('Transcrição não pode estar vazia')
+            }
+            return this.simccitService.categorizeTranscript(categorizeTranscriptDto.transcricao)
+        } catch (error) {
+            throw error
+        }
     }
 
     @Post('categorizar-csv')
     @UseInterceptors(FileInterceptor('file'))
-    async categorizeCsvFile(@UploadedFile() file: IUploadedFile, @Res() res: Response) {
-        if (!file) {
-            return res.status(HttpStatus.BAD_REQUEST).json({
-                message: 'Nenhum arquivo foi enviado',
-            })
-        }
-
-        if (file.mimetype !== 'text/csv' && !file.originalname.endsWith('.csv')) {
-            return res.status(HttpStatus.BAD_REQUEST).json({
-                message: 'O arquivo deve ser um CSV',
-            })
-        }
-
+    async categorizeCsvFile(@UploadedFile() file: IUploadedFile) {
         try {
+            if (!file) {
+                throw new BadRequestException('Arquivo não enviado')
+            }
+
+            if (file.mimetype !== 'text/csv' && !file.originalname.endsWith('.csv')) {
+                throw new BadRequestException('O arquivo deve ser um CSV')
+            }
             const csvContent = file.buffer.toString('utf-8')
             const result = await this.simccitService.categorizeCsv(csvContent)
 
-            res.setHeader('Content-Type', 'text/csv')
-            res.setHeader('Content-Disposition', `attachment; filename="categorized_${file.originalname}"`)
-
-            return res.send(result)
-        } catch (error) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                message: 'Erro ao processar o arquivo CSV',
-                error: error.message,
+            return new StreamableFile(Buffer.from(result, 'utf-8'), {
+                type: 'text/csv',
+                disposition: `attachment; filename="categorized_${file.originalname}"`,
             })
+        } catch (error) {
+            throw error
         }
     }
 
     @Get('example-csv-format')
-    getExampleCsvFormat(@Res() res: Response) {
+    getExampleCsvFormat() {
         const exampleCsv = `falante,texto,categorizacao
-Terapeuta,"Bom dia, como você está se sentindo hoje?",
-Cliente,"Tenho me sentido bastante ansioso ultimamente, especialmente no trabalho."`
-        res.setHeader('Content-Type', 'text/csv')
-        res.setHeader('Content-Disposition', 'attachment; filename="exemplo_formato.csv"')
-        return res.send(exampleCsv)
+            Terapeuta,"Bom dia, como você está se sentindo hoje?",
+            Cliente,"Tenho me sentido bastante ansioso ultimamente, especialmente no trabalho."`
+
+        return new StreamableFile(Buffer.from(exampleCsv, 'utf-8'), {
+            type: 'text/csv',
+            disposition: `attachment; filename="example_format.csv"`,
+        })
     }
 }
