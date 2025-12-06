@@ -1,20 +1,21 @@
 import { StructuredOutputParser } from '@langchain/core/output_parsers'
 import { FewShotPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
-import { ChatOpenAI } from '@langchain/openai'
 import { Injectable, InternalServerErrorException, Logger, OnModuleInit } from '@nestjs/common'
 import { z } from 'zod'
 import { FalaCategorizada } from '../interfaces/FalaCategorizada.interface'
 import { CsvService } from './csv.service'
+import { BaseChatModel } from '@langchain/core/language_models/chat_models'
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
+import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 @Injectable()
 export class SimccitService implements OnModuleInit {
     private readonly logger = new Logger(SimccitService.name)
     private readonly apiKey = process.env.API_KEY
-    private readonly modelName = process.env.MODEL
-    private readonly apiUrl = process.env.API_URL
+    private readonly modelName = process.env.MODEL || "models/gemini-flash-latest"
     private parser: StructuredOutputParser<typeof this.outputSchema>
     private formattedPrompt: FewShotPromptTemplate
-    private model: ChatOpenAI
+    private model: BaseChatModel
     private readonly outputSchema = z
         .array(
             z.object({
@@ -177,18 +178,21 @@ export class SimccitService implements OnModuleInit {
             this.logger.error('API_KEY não encontrada nas variáveis de ambiente!')
         }
 
-        this.model = new ChatOpenAI({
+        this.model = new ChatGoogleGenerativeAI({
             apiKey: this.apiKey,
-            configuration: {
-                baseURL: this.apiUrl,
-            },
-            modelName: this.modelName,
+            model: this.modelName,
             temperature: 0,
             maxRetries: 3,
-            timeout: 60000,
-            modelKwargs: {
-                top_p: 0.1,
-            },
+            safetySettings: [
+                {
+                    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                },
+                {
+                    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                },
+            ],
         })
 
         this.parser = StructuredOutputParser.fromZodSchema(this.outputSchema)
