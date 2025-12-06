@@ -1,10 +1,11 @@
 import { BadRequestException } from '@nestjs/common'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { FalaCategorizada } from '../interfaces/FalaCategorizada.interface'
 import { CsvService } from './csv.service'
 
 const csvValido = `falante,texto,categoria
 Terapeuta,Oi,
-Paciente,Olá,`
+Cliente,Olá,`
 
 const csvInvalido = `nome,frase
 A,B`
@@ -19,14 +20,12 @@ describe('CsvService', () => {
         vi.clearAllMocks()
     })
 
-    it('parseCsvToTranscription deve retornar transcrição, headers e records', () => {
+    it('parseCsvToTranscription deve retornar a transcrição formatada corretamente', () => {
         const resultado = service.parseCsvToTranscription(csvValido)
+        expect(resultado).toHaveProperty('transcricao')
         expect(resultado.transcricao).toContain('Terapeuta: Oi')
-        expect(resultado.headers).toEqual(['falante', 'texto', 'categoria'])
-        expect(resultado.records.length).toBe(2)
-        expect(resultado.falanteIndex).toBe(0)
-        expect(resultado.textoIndex).toBe(1)
-        expect(resultado.categorizacaoIndex).toBe(2)
+        expect(resultado.transcricao).toContain('Cliente: Olá')
+        expect(resultado.transcricao).not.toContain('undefined')
     })
 
     it('parseCsvToTranscription deve lançar exceção para CSV vazio', () => {
@@ -42,15 +41,16 @@ describe('CsvService', () => {
         expect(() => service.parseCsvToTranscription(csvSemDados)).toThrow(BadRequestException)
     })
 
-    it('reconstructCsvWithCategorization deve atualizar e converter para CSV', () => {
-        const parseResult = service.parseCsvToTranscription(csvValido)
-        const categorizado = [
+    it('reconstructCsvWithCategorization deve gerar o CSV final corretamente', () => {
+        const categorizado: FalaCategorizada[] = [
             { falante: 'Terapeuta', texto: 'Oi', categoria: 'SRE' },
-            { falante: 'Paciente', texto: 'Olá', categoria: 'SA' },
+            { falante: 'Cliente', texto: 'Olá', categoria: 'OPO' },
         ]
+
         const csvFinal = service.reconstructCsvWithCategorization(categorizado)
+
         expect(csvFinal).toContain('"falante","texto","categoria"')
         expect(csvFinal).toContain('"Terapeuta","Oi","SRE"')
-        expect(csvFinal).toContain('"Paciente","Olá","SA"')
+        expect(csvFinal).toContain('"Cliente","Olá","OPO"')
     })
 })

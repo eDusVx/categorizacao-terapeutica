@@ -50,10 +50,15 @@ describe('SimccitController', () => {
         expect(mockSimccitService.categorizeCsv).toHaveBeenCalledWith('csv-content')
     })
 
-    it('getExampleCsvFormat deve retornar um StreamableFile com o exemplo', () => {
+    it('getExampleCsvFormat deve retornar um StreamableFile com o exemplo correto', () => {
         const retorno = controller.getExampleCsvFormat()
+
         expect(retorno).toBeInstanceOf(StreamableFile)
-        const buffer = retorno.getStream().read()
-        expect(buffer.toString()).toContain('falante,texto,categoria')
+
+        const stream = retorno.getStream()
+        const buffer = stream.read()
+
+        expect(buffer.toString()).toContain('falante,texto')
+        expect(buffer.toString()).toContain('Terapeuta,"Bom dia, como você está?"')
     })
 })
